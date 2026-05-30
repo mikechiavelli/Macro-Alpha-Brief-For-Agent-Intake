@@ -1,0 +1,232 @@
+{
+  "schema_version": "1.1.0",
+  "report_type": "macro_alpha_brief",
+  "report_type_guard": "macro_alpha_brief",
+  "brief_id": "pft-mab-20260530-0ae6bc15cf",
+  "generated_at": "2026-05-30T15:57:58Z",
+  "data_as_of": "2026-05-30T15:57:58Z",
+  "market_window": {
+    "label": "rolling_30d",
+    "start": "2026-05-01",
+    "end": "2026-05-30",
+    "timezone": "UTC"
+  },
+  "theme": "stablecoin_liquidity_and_major_asset_rotation",
+  "thesis": {
+    "direction": "risk_off_btc_overweight",
+    "horizon_days": 30,
+    "statement": "Aggregate stablecoin supply is flat-to-contracting while capital concentrates into BTC at the expense of ETH and alts. The current window is a defensive rotation regime: overweight BTC, underweight ETH and alt beta, until either stablecoin supply re-expands (fresh liquidity) or ETH/BTC bases and turns up (rotation back out the risk curve).",
+    "implication_for_routing": "Bias Task Node allocation toward BTC-correlated exposure; discount alt-beta theses lacking an idiosyncratic catalyst until liquidity or ETH/BTC confirms a regime change."
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "metric": "stablecoin_aggregate_market_cap_usd",
+      "value": 315458003012.0,
+      "unit": "usd",
+      "window": "spot",
+      "observation": "Aggregate stablecoin market capitalization (CoinGecko Stablecoins category).",
+      "interpretation": "Total on-chain dry powder; level is the denominator for buying power.",
+      "confidence": "HIGH",
+      "source_ref": "S2",
+      "as_of": "2026-05-30T15:57:58Z"
+    },
+    {
+      "id": "E2",
+      "metric": "usdt_usdc_supply_change_30d_pct",
+      "value": -0.96,
+      "unit": "percent",
+      "window": "30d",
+      "observation": "USDT+USDC combined market cap moved -2,565,420,927 USD over the window.",
+      "interpretation": "Proxy for net stablecoin flow; negative reading indicates net redemption / no fresh liquidity. Proxy, not on-chain mint/burn or exchange netflow data.",
+      "confidence": "MEDIUM",
+      "source_ref": "S3",
+      "as_of": "2026-05-30T15:57:58Z"
+    },
+    {
+      "id": "E3",
+      "metric": "btc_dominance_pct",
+      "value": 57.45,
+      "unit": "percent",
+      "window": "spot",
+      "observation": "BTC share of total crypto market cap.",
+      "interpretation": "Elevated dominance signals defensive concentration into BTC within crypto.",
+      "confidence": "HIGH",
+      "source_ref": "S1",
+      "as_of": "2026-05-30T15:57:58Z"
+    },
+    {
+      "id": "E4",
+      "metric": "eth_btc_ratio",
+      "value": 0.027408,
+      "unit": "ratio",
+      "window": "spot",
+      "observation": "ETH priced in BTC; ratio changed -7.30% over 30d.",
+      "interpretation": "Falling ETH/BTC is the core rotation tell: capital leaving the risk curve for BTC.",
+      "confidence": "HIGH",
+      "source_ref": "S4",
+      "as_of": "2026-05-30T15:57:58Z"
+    },
+    {
+      "id": "E5",
+      "metric": "eth_btc_change_30d_pct",
+      "value": -7.3,
+      "unit": "percent",
+      "window": "30d",
+      "observation": "ETH -10.54% vs BTC -3.18% over 30d.",
+      "interpretation": "ETH materially underperforming BTC corroborates the defensive rotation.",
+      "confidence": "HIGH",
+      "source_ref": "S4",
+      "as_of": "2026-05-30T15:57:58Z"
+    },
+    {
+      "id": "E6",
+      "metric": "total3_altcoin_market_cap_usd",
+      "value": 850933447418.0,
+      "unit": "usd",
+      "window": "spot",
+      "observation": "Total market cap excluding BTC and ETH (derived: total - BTC - ETH).",
+      "interpretation": "Alt aggregate; context size for alt-beta exposure being de-emphasized.",
+      "confidence": "HIGH",
+      "source_ref": "S1",
+      "as_of": "2026-05-30T15:57:58Z"
+    }
+  ],
+  "scoring_readiness": {
+    "directional_bias": "risk_off",
+    "conviction_weight": 0.62,
+    "time_horizon_days": 30,
+    "signals": [
+      {
+        "id": "SIG_LIQ",
+        "metric": "usdt_usdc_supply_change_30d_pct",
+        "reading": -0.96,
+        "unit": "percent",
+        "threshold_bull": 2.0,
+        "threshold_bear": 0.0,
+        "normalized": -0.481,
+        "weight": 0.4
+      },
+      {
+        "id": "SIG_DOM",
+        "metric": "btc_dominance_pct",
+        "reading": 57.45,
+        "unit": "percent",
+        "threshold_bull": 55.0,
+        "threshold_bear": 60.0,
+        "normalized": -0.0205,
+        "weight": 0.25
+      },
+      {
+        "id": "SIG_ROT",
+        "metric": "eth_btc_change_30d_pct",
+        "reading": -7.3,
+        "unit": "percent",
+        "threshold_bull": 5.0,
+        "threshold_bear": -5.0,
+        "normalized": -1.0,
+        "weight": 0.35
+      }
+    ],
+    "routing_hint": {
+      "favor": [
+        "BTC"
+      ],
+      "reduce": [
+        "ETH",
+        "alts"
+      ],
+      "posture": "defensive"
+    }
+  },
+  "invalidation": {
+    "logic": "ANY",
+    "conditions": [
+      {
+        "id": "INV1",
+        "metric": "usdt_usdc_supply_change_30d_pct",
+        "comparator": ">=",
+        "value": 2.0,
+        "unit": "percent",
+        "window": "30d",
+        "rationale": "Stablecoin supply re-expanding by >=2% signals fresh liquidity; the no-fuel premise no longer holds."
+      },
+      {
+        "id": "INV2",
+        "metric": "eth_btc_ratio",
+        "comparator": ">=",
+        "value": 0.03,
+        "unit": "ratio",
+        "window": "spot",
+        "rationale": "ETH/BTC reclaiming the window-open level reverses the rotation tell; risk curve turning back up."
+      },
+      {
+        "id": "INV3",
+        "metric": "btc_dominance_pct",
+        "comparator": "<=",
+        "value": 55.0,
+        "unit": "percent",
+        "window": "spot",
+        "rationale": "BTC dominance breaking below 55% indicates capital rotating out to alts; defensive thesis weakens."
+      }
+    ]
+  },
+  "confidence": {
+    "overall_tier": "MEDIUM",
+    "overall_numeric": 0.62,
+    "rationale": "Market-structure reads (caps, dominance, ratios) are direct live aggregated data at HIGH confidence. The net-flow read rests on a USDT+USDC supply proxy rather than on-chain mint/burn or exchange netflow data, and 30-day macro regime calls carry inherent timing uncertainty, so the composite is held at MEDIUM.",
+    "data_quality": "live_aggregated_with_one_supply_proxy"
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "name": "CoinGecko /global",
+      "endpoint": "GET /api/v3/global",
+      "tier": "aggregated_market_data",
+      "retrieved_at": "2026-05-30T15:57:58Z",
+      "url": "https://api.coingecko.com/api/v3/global"
+    },
+    {
+      "id": "S2",
+      "name": "CoinGecko /coins/categories (Stablecoins)",
+      "endpoint": "GET /api/v3/coins/categories",
+      "tier": "aggregated_market_data",
+      "retrieved_at": "2026-05-30T15:57:58Z",
+      "url": "https://api.coingecko.com/api/v3/coins/categories"
+    },
+    {
+      "id": "S3",
+      "name": "CoinGecko /coins/{id}/market_chart (USDT, USDC, 30d daily)",
+      "endpoint": "GET /api/v3/coins/tether|usd-coin/market_chart",
+      "tier": "aggregated_market_data",
+      "retrieved_at": "2026-05-30T15:57:58Z",
+      "url": "https://api.coingecko.com/api/v3/coins/tether/market_chart?vs_currency=usd&days=30&interval=daily"
+    },
+    {
+      "id": "S4",
+      "name": "CoinGecko ETH/BTC (simple price + 30d chart in BTC)",
+      "endpoint": "GET /api/v3/simple/price ; /coins/ethereum/market_chart?vs_currency=btc",
+      "tier": "aggregated_market_data",
+      "retrieved_at": "2026-05-30T15:57:58Z",
+      "url": "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=btc"
+    }
+  ],
+  "provenance": {
+    "pipeline": "alpha_registry_macro_ingestion",
+    "live_fetched_ratio": 1.0,
+    "completeness_score": 0.92,
+    "data_gaps": [
+      "exchange_stablecoin_netflows",
+      "stablecoin_mint_burn_events",
+      "spot_etf_net_flows",
+      "perp_funding_open_interest"
+    ],
+    "proxy_substitutions": [
+      {
+        "intended": "net_stablecoin_flow",
+        "used": "usdt_usdc_aggregate_supply_delta_30d",
+        "reason": "on-chain mint/burn and exchange netflow feeds not reachable in build environment"
+      }
+    ]
+  }
+}
